@@ -2,6 +2,7 @@
 
 from queue import PriorityQueue
 from random import randrange
+from time import time
 
 ####admissible heuristic using Manhattan distance
 def heuristic (my_pos, target):
@@ -89,7 +90,7 @@ def A_star (start, target, grid, grid_size):
 		else:
 			found = True
 
-	if next_state.qsize() == 0:
+	if not found and next_state.qsize() == 0:
 		return [-1, -1]
 	####creates the list of moves for the optimal path
 	moves = []
@@ -99,7 +100,7 @@ def A_star (start, target, grid, grid_size):
 		parent = states[tuple(parent)][1]
 	#print(moves)
 	####returns the last element (1st move)
-	return moves[len(moves)-1]
+	return [moves[len(moves)-1], len(states.keys())]
 
 inputFile = input("Insert input file: ")
 f = open(inputFile, 'r')
@@ -124,6 +125,7 @@ print()
 f.close()
 ###################################################################################
 ####initialize
+start_time = time()
 start = robot1[:]
 target = robot2[:]
 grid_size.reverse()
@@ -133,12 +135,14 @@ impossible = False
 caught = False
 R1_moves = [start]
 R2_moves = [target]
+total_nodes = 0
 ####start chasing R2
 ####if A_start returns [-1,-1] as the next move its impossible to catch R2
 ####else appends the the move to R1_moves
 ####then if R1 hasn't caught R2, R2 moves randomly in the area
 while not (caught or impossible):
-	move = A_star(start, target, grid, grid_size)
+	[move, nodes] = A_star(start, target, grid, grid_size)
+	total_nodes += nodes
 	if move == [-1,-1]:
 		impossible = True
 	else:
@@ -151,6 +155,9 @@ while not (caught or impossible):
 		R2_moves.append(target)
 ###################################################################################
 ####outputs data
+end_time = time()
+print("Time needed:", end_time - start_time, "seconds")
+print("Total number of nodes produced:",total_nodes)
 if caught:
 	grid = list(map(list,grid))
 	for m in range(len(R2_moves)):
