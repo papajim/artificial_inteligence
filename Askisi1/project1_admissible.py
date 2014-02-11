@@ -91,7 +91,7 @@ def A_star (start, target, grid, grid_size):
 			found = True
 
 	if not found and next_state.qsize() == 0:
-		return [-1, -1]
+		return [[-1, -1], len(states.keys())]
 	####creates the list of moves for the optimal path
 	moves = []
 	parent = current[2]
