@@ -1,5 +1,6 @@
 ####this code runs optimally with python 3.x
 
+import sys
 from queue import PriorityQueue
 from random import randrange
 from time import time
@@ -24,29 +25,12 @@ def random_move(current, grid, grid_size):
 				ok = True
 	return new
 
-####expand returns the new states R1 can reach from its current position
-####taking one and two steps accordingly
-def expand(current, target, grid, grid_size):
-	nodes = []
-	one_step = [[0,1],[0,-1],[1,0],[-1,0]]
-	two_steps = [[0,2],[0,-2],[2,0],[-2,0]]
-	guard = [False, False, False, False] #keeps R1 from jumping over obstacles
+#finds new states from our expansion (current) point
+def find_states(current, target, steps, guard, grid, grid_size):
+	states = []
 	i = 0
-	for s in one_step:
-		temp = current[2][:]
-		temp[0] += s[0]
-		temp[1] += s[1]
-		if (temp[0] >= 0) and (temp[0] < grid_size[0]) and (temp[1] >= 0) and (temp[1] < grid_size[1]):
-			if (grid[temp[0]][temp[1]] != 'X'):
-				g = current[1] + abs(s[0]) + abs(s[1])
-				f = g + heuristic(temp, target)
-				node = [f,g,temp]
-				nodes.append(node)
-				guard[i] = True
-		i += 1
-	i = 0
-	for s in two_steps:
-		if guard[i] == True:
+	for s in steps:
+		if guard[i]:
 			temp = current[2][:]
 			temp[0] += s[0]
 			temp[1] += s[1]
@@ -54,9 +38,22 @@ def expand(current, target, grid, grid_size):
 				if (grid[temp[0]][temp[1]] != 'X'):
 					g = current[1] + abs(s[0]) + abs(s[1])
 					f = g + heuristic(temp, target)
-					node = [f,g,temp]
-					nodes.append(node)
-		i+=1
+					state = [f, g, temp]
+					states.append(state)
+				else:
+					guard[i] = False
+		i += 1
+	
+	return states
+####expand returns the new states R1 can reach from its current position
+####taking one and two steps accordingly
+def expand(current, target, grid, grid_size):
+	nodes = []
+	one_step = [[0,1],[0,-1],[1,0],[-1,0]]
+	two_steps = [[0,2],[0,-2],[2,0],[-2,0]]
+	guard = [True,True,True,True] #keeps R1 from jumping over obstacles
+	nodes = find_states(current, target, one_step, guard, grid, grid_size)
+	nodes += find_states(current, target, two_steps, guard, grid, grid_size)
 	return nodes
 
 ####A_star uses two types of datastractures a dictionary (hash table) and a priority queue (heap)
@@ -110,27 +107,34 @@ grid_size = list(map(int, f.readline().replace('\n','').split(' ')))
 robot1 = list(map(int, f.readline().replace('\n','').split(' ')))
 robot2 = list(map(int, f.readline().replace('\n','').split(' ')))
 grid = f.read().splitlines()
+f.close()
 
+valid = ['X','O']
 ####outputs input file for demonstration reasons
 print("grid_x = " + str(grid_size[0]))
 print("grid_y = " + str(grid_size[1]))
-print("Rogbot1 Xcoord = " + str(robot1[0]))
-print("Rogbot1 Ycoord = " + str(robot1[1]))
-print("Rogbot2 Xcoord = " + str(robot2[0]))
-print("Rogbot2 Ycoord = " + str(robot2[1]) + "\n")
+print("Robot1 Xcoord = " + str(robot1[0]))
+print("Robot1 Ycoord = " + str(robot1[1]))
+print("Robot2 Xcoord = " + str(robot2[0]))
+print("Robot2 Ycoord = " + str(robot2[1]) + "\n")
 for row in grid:
     print(row)
 print()
 
-f.close()
+for row in grid:
+	for element in row:
+		if element not in valid:
+			print("Invalid Input")
+			sys.exit()
+
 ###################################################################################
 ####initialize
 start_time = time()
 start = robot1[:]
 target = robot2[:]
-grid_size.reverse()
-start.reverse()
-target.reverse()
+#grid_size.reverse()
+#start.reverse()
+#target.reverse()
 impossible = False
 caught = False
 R1_moves = [start]
