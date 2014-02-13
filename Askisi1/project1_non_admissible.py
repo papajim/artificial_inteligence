@@ -1,7 +1,6 @@
-#this code runs optimally with python 3.x
+# code runs optimally with python 3.x
 
 import sys
-import visual
 from queue import PriorityQueue
 from random import randrange
 from time import time
@@ -10,7 +9,7 @@ from time import time
 def heuristic (my_pos, target):
 	h = abs(my_pos[0] - target[0])
 	h += abs(my_pos[1] - target[1])
-	return h
+	return h*h
 
 ####moves R2 randomly
 def random_move(current, grid, grid_size):
@@ -102,7 +101,6 @@ def A_star (start, target, grid, grid_size):
 
 inputFile = input("Insert input file: ")
 f = open(inputFile, 'r')
-g = open("adm_stats.txt","w")
 ###################################################################################
 ####reads the input file
 grid_size = list(map(int, f.readline().replace('\n','').split(' ')))
@@ -167,34 +165,29 @@ end_time = time()
 print("Time needed:", end_time - start_time, "seconds")
 print("Total number of nodes produced:",total_nodes)
 if caught:
-    grid = list(map(list,grid))
-    rv = visual.RobotVisualization(grid_size[0],grid_size[1],0.7)
-    for i in range(len(grid)):
-        grid[i] = [' ' if x=='O' else x for x in grid[i]]
-    for m in range(len(R2_moves)):
-        print("Step:"+str(m)+"\n")
-        grid = list(map(list,grid))
-        grid[R1_moves[m][0]][R1_moves[m][1]] = '1'
-        grid[R2_moves[m][0]][R2_moves[m][1]] = '2'
-        rv.update(grid,R1_moves[m],R2_moves[m],m+1)
-        temp_grid = list(map("".join,grid))
-        print(''.join(['_' for i in range(len(grid[0]))]))
-        for row in temp_grid:
-            print(row)
-        print(''.join(['_' for i in range(len(grid[0]))]))
-        print("R1 move:", R1_moves[m])
-        print("R2 move:", R2_moves[m])
-        print()
-    l = len(R1_moves)
-    grid[R1_moves[l-1][0]][R1_moves[l-1][1]] = '1'
-    temp_grid = list(map("".join,grid))
-    for row in temp_grid:
-        print(row)
-    print("R1 moves to", R1_moves[l-1],"and catches R2")
-    print("R1 did", l,"moves to catch R2")
-    g.write(str(l)+"\n")
+	grid = list(map(list,grid))
+	for i in range(len(grid)):
+	  grid[i] = [' ' if x=='O' else x for x in grid[i]]
+	for m in range(len(R2_moves)):
+		grid = list(map(list,grid))
+		grid[R1_moves[m][0]][R1_moves[m][1]] = '1'
+		grid[R2_moves[m][0]][R2_moves[m][1]] = '2'
+		temp_grid = list(map("".join,grid))
+		print(''.join(['_' for i in range(len(grid[0]))]))
+		for row in temp_grid:
+			print(row)
+		print(''.join(['_' for i in range(len(grid[0]))]))
+		print("R1 move:", R1_moves[m])
+		print("R2 move:", R2_moves[m])
+		print()
+	l = len(R1_moves)
+	grid[R1_moves[l-1][0]][R1_moves[l-1][1]] = '1'
+	temp_grid = list(map("".join,grid))
+	for row in temp_grid:
+		print(row)
+	print("R1 moves to", R1_moves[l-1],"and catches R2")
+	print("R1 did", l,"moves to catch R2")
 else:
-    print('Impossible to catch. R2 is really clever !!!\n')
-    g.write("-1\n")
-g.close()
+	print('Impossible to catch. R2 is really clever !!!\n')
+
 

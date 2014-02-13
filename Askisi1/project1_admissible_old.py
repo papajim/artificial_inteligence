@@ -156,6 +156,8 @@ while not (caught or impossible):
 	if not caught:
 		target = random_move(target, grid, grid_size)
 		R2_moves.append(target)
+		if (start == target):
+			caught = True
 ###################################################################################
 ####outputs data
 end_time = time()
