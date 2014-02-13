@@ -5,7 +5,7 @@ import random
 from tkinter import *
 
 class RobotVisualization:
-    def __init__(self, height, width, delay = 0.2):
+    def __init__(self, width, height, delay = 0.2):
     	#"Initializes a visualization with the specified parameters."
         # Number of seconds to pause after each frame
         self.delay = delay
@@ -67,13 +67,10 @@ class RobotVisualization:
 	 	# "Redraws the visualization with the specified room and robot state."
 		# Removes a gray square for any tiles has not an obstacle.
     def update(self, grid, robot1, robot2, step):
-        tgrid = [[grid[x][y] for x in range(self.height)] for y in range(self.width)]
-        for i in range(len(tgrid)):
-            tgrid[i].reverse()
-        for j in range(self.height):
-            for i in range(self.width):
-                if tgrid[i][j]=='X':
-                    self.w.delete(self.tiles[(i,j)])
+        for i in range(self.width):
+            for j in range(self.height):
+                if grid[i][j]=='X':
+                    self.w.delete(self.tiles[(i, j)])
 		
 		# Delete all existing robots.
         if self.robots:
@@ -83,14 +80,12 @@ class RobotVisualization:
 
 		# Draw new robots
         self.robots = []
-        x, y = self.height-robot1[0]-1,robot1[1]
-        x, y = y, x
+        x, y = robot1[0],self.height-robot1[1]-1
         x1, y1 = self._map_coords(x - 0.08, y - 0.08)
         x2, y2 = self._map_coords(x + 0.08, y + 0.08)
         self.robots.append(self.w.create_oval(x1, y1, x2, y2,fill = "black"))
         self.robots.append(self._draw_robot(x,y,1))
-        x, y = self.height-robot2[0]-1,robot2[1]
-        x, y = y, x
+        x, y = robot2[0],self.height-robot2[1]-1
         x1, y1 = self._map_coords(x - 0.08, y - 0.08)
         x2, y2 = self._map_coords(x + 0.08, y + 0.08)
         self.robots.append(self.w.create_oval(x1, y1, x2, y2,fill = "black"))

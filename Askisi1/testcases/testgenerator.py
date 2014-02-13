@@ -1,6 +1,6 @@
 import sys
 import random
-print (sys.argv[:])
+#print (sys.argv[:])
 try:
 	x_length = int(sys.argv[1])
 	y_length = int(sys.argv[2])
@@ -20,7 +20,7 @@ for y in range(y_length):
 #### HORIZONTALLY #####
 
 for y in range(y_length):
-  if(random.uniform(0,1)>0.5):
+  if(random.uniform(0,1)>0.8):
     deigma = ['X' for x  in range(random.randrange(0,x_length)) ]
     start_position = random.randrange(0,x_length) 
     for k in range(start_position,start_position+len(deigma)):
@@ -30,7 +30,7 @@ for y in range(y_length):
 #### VERTICALLY #### 
 
 for x in range(x_length):
-  if(random.uniform(0,1)>0.5):
+  if(random.uniform(0,1)>0.8):
     deigma = ['X' for y  in range(random.randrange(0,y_length)) ]
     start_position = random.randrange(0,y_length) 
     for k in range(start_position,start_position+len(deigma)):
@@ -51,7 +51,7 @@ while not ok:
     ok = True
 
 print(str(x_length)+" "+str(y_length))
-print(str(robot1[0])+" "+str(robot1[1]))
-print(str(robot2[0])+" "+str(robot2[1]))
+print(str(robot1[1])+" "+str(robot1[0]))
+print(str(robot2[1])+" "+str(robot2[0]))
 for row in grid:
   print("".join(row))
