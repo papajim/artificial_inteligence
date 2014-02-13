@@ -1,4 +1,4 @@
-####this code runs optimally with python 3.x
+# code runs optimally with python 3.x
 
 import sys
 from queue import PriorityQueue
@@ -9,7 +9,7 @@ from time import time
 def heuristic (my_pos, target):
 	h = abs(my_pos[0] - target[0])
 	h += abs(my_pos[1] - target[1])
-	return h
+	return h*h
 
 ####moves R2 randomly
 def random_move(current, grid, grid_size):
@@ -132,9 +132,9 @@ for row in grid:
 start_time = time()
 start = robot1[:]
 target = robot2[:]
-#grid_size.reverse()
-#start.reverse()
-#target.reverse()
+grid_size.reverse()
+start.reverse()
+target.reverse()
 impossible = False
 caught = False
 R1_moves = [start]
@@ -164,13 +164,17 @@ print("Time needed:", end_time - start_time, "seconds")
 print("Total number of nodes produced:",total_nodes)
 if caught:
 	grid = list(map(list,grid))
+	for i in range(len(grid)):
+	  grid[i] = [' ' if x=='O' else x for x in grid[i]]
 	for m in range(len(R2_moves)):
 		grid = list(map(list,grid))
 		grid[R1_moves[m][0]][R1_moves[m][1]] = '1'
 		grid[R2_moves[m][0]][R2_moves[m][1]] = '2'
 		temp_grid = list(map("".join,grid))
+		print(''.join(['_' for i in range(len(grid[0]))]))
 		for row in temp_grid:
 			print(row)
+		print(''.join(['_' for i in range(len(grid[0]))]))
 		print("R1 move:", R1_moves[m])
 		print("R2 move:", R2_moves[m])
 		print()
@@ -183,4 +187,5 @@ if caught:
 	print("R1 did", l,"moves to catch R2")
 else:
 	print('Impossible to catch. R2 is really clever !!!\n')
+
 
