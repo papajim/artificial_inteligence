@@ -161,7 +161,6 @@ while not (caught or impossible):
 		R2_moves.append(target)
 		if (start == target):
 			caught = True
-	print(R1_moves)
 ###################################################################################
 ####outputs data
 end_time = time()
