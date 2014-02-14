@@ -1,6 +1,7 @@
 # code runs optimally with python 3.x
 
 import sys
+import visual
 from queue import PriorityQueue
 from random import randrange
 from time import time
@@ -168,7 +169,7 @@ if caught:
 	grid = list(map(list,grid))
 	rv = visual.RobotVisualization(grid_size[0],grid_size[1],0,7)
 	for i in range(len(grid)):
-                grid[i] = [' ' if x=='O' else x for x in grid[i]]
+		grid[i] = [' ' if x=='O' else x for x in grid[i]]
 	for m in range(len(R2_moves)):
 		grid = list(map(list,grid))
 		grid[R1_moves[m][0]][R1_moves[m][1]] = '1'
