@@ -166,28 +166,35 @@ print("Time needed:", end_time - start_time, "seconds")
 print("Total number of nodes produced:",total_nodes)
 if caught:
 	grid = list(map(list,grid))
+	rv = visual.RobotVisualization(grid_size[0],grid_size[1],0,7)
 	for i in range(len(grid)):
-	  grid[i] = [' ' if x=='O' else x for x in grid[i]]
+                grid[i] = [' ' if x=='O' else x for x in grid[i]]
 	for m in range(len(R2_moves)):
 		grid = list(map(list,grid))
 		grid[R1_moves[m][0]][R1_moves[m][1]] = '1'
 		grid[R2_moves[m][0]][R2_moves[m][1]] = '2'
+		rv.update(grid, R1_moves[m], R2_moves[m], m+1)
 		temp_grid = list(map("".join,grid))
 		print(''.join(['_' for i in range(len(grid[0]))]))
 		for row in temp_grid:
 			print(row)
 		print(''.join(['_' for i in range(len(grid[0]))]))
-		print("R1 move:", R1_moves[m])
-		print("R2 move:", R2_moves[m])
+		temp_print = R1_moves[m][:]
+		temp_print.reverse()
+		print("R1 move:", temp_print)
+		temp_print = R2_moves[m][:]
+		temp_print.reverse()
+		print("R2 move:", temp_print)
 		print()
 	l = len(R1_moves)
 	grid[R1_moves[l-1][0]][R1_moves[l-1][1]] = '1'
 	temp_grid = list(map("".join,grid))
 	for row in temp_grid:
 		print(row)
-	print("R1 moves to", R1_moves[l-1],"and catches R2")
+	temp_print = R1_moves[l-1][:]
+	temp_print.reverse()
+	print("R1 moves to", temp_print,"and catches R2")
 	print("R1 did", l,"moves to catch R2")
 else:
 	print('Impossible to catch. R2 is really clever !!!\n')
-
 

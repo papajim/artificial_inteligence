@@ -182,15 +182,21 @@ if caught:
         for row in temp_grid:
             print(row)
         print(''.join(['_' for i in range(len(grid[0]))]))
-        print("R1 move:", R1_moves[m])
-        print("R2 move:", R2_moves[m])
+        temp_print = R1_moves[m][:]
+        temp_print.reverse()
+        print("R1 move:", temp_print)
+        temp_print = R2_moves[m][:]
+        temp_print.reverse()
+        print("R2 move:", temp_print)
         print()
     l = len(R1_moves)
     grid[R1_moves[l-1][0]][R1_moves[l-1][1]] = '1'
     temp_grid = list(map("".join,grid))
     for row in temp_grid:
         print(row)
-    print("R1 moves to", R1_moves[l-1],"and catches R2")
+    temp_print = R1_moves[l-1][:]
+    temp_print.reverse()
+    print("R1 moves to", temp_print,"and catches R2")
     print("R1 did", l,"moves to catch R2")
     g.write(str(l)+"\n")
 else:
